@@ -10,5 +10,7 @@ public class Vision {
     private Vision() {
     }
 
-
+    public void run() {
+        System.out.println("Running vision");
+    }
 }

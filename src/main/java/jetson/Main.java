@@ -2,6 +2,7 @@ package jetson;
 
 import com.google.gson.JsonObject;
 import jetson.net.Server;
+import jetson.vision.Vision;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -11,6 +12,10 @@ public class Main {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }).start();
+
+        new Thread(() -> {
+            Vision.getInstance().run();
         }).start();
 
         while (true) {
