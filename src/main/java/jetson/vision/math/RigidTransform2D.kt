@@ -11,6 +11,26 @@ class RigidTransform2D : Interpolable<RigidTransform2D> {
         fun fromRotation(r: Rotation2D) = RigidTransform2D(Translation2D(), r)
         fun fromTranslation(t: Translation2D) = RigidTransform2D(t, Rotation2D())
 
+        fun fromVelocity(delta: Delta): RigidTransform2D {
+            val sinTheta = sin(delta.deltaTheta)
+            val cosTheta = cos(delta.deltaTheta)
+            var s: Double
+            var c: Double
+
+            if (abs(delta.deltaTheta) < 1E-9) {
+                s = 1.0 - 1.0 / 6.0 * delta.deltaTheta * delta.deltaTheta
+                c = 0.5 * delta.deltaTheta
+            } else {
+                s = sinTheta / delta.deltaTheta
+                c = (1.0 - cosTheta) / delta.deltaTheta
+            }
+
+            return RigidTransform2D(
+                    Translation2D(delta.deltaX * s - delta.deltaY * c, delta.deltaX * c + delta.deltaY * s),
+                    Rotation2D(cosTheta, sinTheta, false)
+            )
+        }
+
         fun exp(delta: Twist2D): RigidTransform2D {
             val sinTheta = sin(delta.dTheta)
             val cosTheta = cos(delta.dTheta)
@@ -60,6 +80,8 @@ class RigidTransform2D : Interpolable<RigidTransform2D> {
             return aT.translateBy(aRot.toTranslation().scale(t))
         }
     }
+
+    class Delta(val deltaX: Double, val deltaY: Double, val deltaTheta: Double)
 
     val trans: Translation2D
     val rot: Rotation2D

@@ -3,9 +3,10 @@ package jetson;
 import com.google.gson.JsonObject;
 import jetson.net.Server;
 import jetson.vision.Vision;
+import jetson.vision.pathfinding.MotionData;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         new Thread(() -> {
             try {
                 Server.getInstance().run();
@@ -20,12 +21,6 @@ public class Main {
 
         while (true) {
             if (Server.getInstance().isConnected()) {
-                JsonObject o = new JsonObject();
-                o.addProperty("message", "Hello world from Java");
-                o.addProperty("current_time", System.currentTimeMillis());
-
-                System.out.println(Server.getInstance().get().toString());
-                Server.getInstance().send(o);
             }
         }
     }

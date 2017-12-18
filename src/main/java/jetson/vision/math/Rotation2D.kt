@@ -27,7 +27,7 @@ class Rotation2D : Interpolable<Rotation2D> {
         sin = other.sin
     }
 
-    constructor(direction: Translation2D, normalize: Boolean) : this(direction.x(), direction.y(), normalize) {}
+    constructor(direction: Translation2D, normalize: Boolean) : this(direction.x, direction.y, normalize) {}
 
     fun normalize() {
         val magnitude = Math.hypot(cos, sin)
