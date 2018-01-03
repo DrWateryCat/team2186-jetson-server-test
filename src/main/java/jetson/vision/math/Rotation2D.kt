@@ -1,6 +1,7 @@
 package jetson.vision.math
 
 import jetson.vision.interfaces.Interpolable
+import kotlin.math.abs
 
 class Rotation2D : Interpolable<Rotation2D> {
 
@@ -42,19 +43,17 @@ class Rotation2D : Interpolable<Rotation2D> {
     }
 
     fun tan(): Double {
-        return if (Math.abs(cos) < kEpsilon) {
+        return if (abs(cos) < kEpsilon) {
             if (sin >= 0.0) {
-                java.lang.Double.POSITIVE_INFINITY
+                Double.POSITIVE_INFINITY
             } else {
-                java.lang.Double.NEGATIVE_INFINITY
+                Double.NEGATIVE_INFINITY
             }
         } else sin / cos
 
     }
 
-    fun rotateBy(other: Rotation2D): Rotation2D {
-        return Rotation2D(cos * other.cos - sin * other.sin, cos * other.sin + sin * other.cos, true)
-    }
+    fun rotateBy(other: Rotation2D): Rotation2D = Rotation2D(cos * other.cos - sin * other.sin, cos * other.sin + sin * other.cos, true)
 
     fun normal(): Rotation2D = Rotation2D(-sin, cos, false)
 

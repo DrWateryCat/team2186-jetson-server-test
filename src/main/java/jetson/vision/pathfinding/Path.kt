@@ -10,11 +10,13 @@ class Path (var waypoints: ArrayList<Waypoint>){
     var markersCrossed = HashSet<String>()
     var segments = ArrayList<PathSegment>()
     init {
-        (0 until waypoints.size - 1).forEach { i -> segments.add(PathSegment(
-                waypoints[i].position,
-                waypoints[i + 1].position,
-                waypoints[i].speed
-        )) }
+        (0 until waypoints.size - 1).forEach({ i ->
+            segments.add(PathSegment(
+                    waypoints[i].position,
+                    waypoints[i + 1].position,
+                    waypoints[i].speed
+            ))
+        })
 
         if (waypoints.size > 0) {
             val first = waypoints[0]
@@ -89,9 +91,7 @@ class Path (var waypoints: ArrayList<Waypoint>){
         return ret
     }
 
-    fun remainingDistance(): Double {
-        return segments.sumByDouble { it.length }
-    }
+    fun remainingDistance(): Double = segments.sumByDouble { it.length }
 
     fun getLookaheadPoint(pos: Translation2D, lookaheadDist: Double): PathSegment.Sample {
         if (segments.size == 0) {

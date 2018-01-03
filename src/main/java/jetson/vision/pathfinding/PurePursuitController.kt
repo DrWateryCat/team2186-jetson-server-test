@@ -18,7 +18,7 @@ class PurePursuitController (
 ) {
     class Circle(val center: Translation2D, val radius: Double, val turnRight: Boolean)
 
-    lateinit var lastCommand: RigidTransform2D.Delta
+    private lateinit var lastCommand: RigidTransform2D.Delta
     var lastTime: Double = 0.0
     var deltaTime: Double = nominalDt
 

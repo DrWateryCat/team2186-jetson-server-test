@@ -9,7 +9,7 @@ object FramesOfReference {
     private lateinit var fieldToVehicle: InterpolatingTreeMap<InterpolatingDouble, RigidTransform2D>
     private lateinit var vehicleVelocity: RigidTransform2D.Delta
 
-    const val OBSERVATION_BUFFER_SIZE = 100
+    private const val OBSERVATION_BUFFER_SIZE = 100
     init {
         reset(0.0, RigidTransform2D())
     }

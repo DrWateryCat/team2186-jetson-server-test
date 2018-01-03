@@ -10,6 +10,7 @@ import io.netty.util.CharsetUtil;
 import kotlin.jvm.internal.Ref;
 
 import java.nio.charset.Charset;
+import java.util.logging.Logger;
 
 @Sharable
 public class ServerHandler extends ChannelInboundHandlerAdapter {
@@ -20,6 +21,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     private final Object lock = new Object();
 
     private boolean connected = false;
+    private RobotMode mode = RobotMode.DISABLED;
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -29,6 +31,25 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         synchronized (lock) {
             currentInput = new JsonParser().parse(buf.toString(CharsetUtil.US_ASCII));
             out = currentOutput;
+
+            switch (currentInput.getAsJsonObject().get("current_mode").getAsInt()) {
+                case 0: {
+                    mode = RobotMode.DISABLED;
+                    break;
+                }
+                case 1: {
+                    mode = RobotMode.AUTO;
+                    break;
+                }
+                case 2: {
+                    mode = RobotMode.TELEOP;
+                    break;
+                }
+                default: {
+                    Logger.getLogger("ServerHandler").warning("Invalid robot state!\nDisabling...");
+                    mode = RobotMode.DISABLED;
+                }
+            }
 
             connected = true;
         }
@@ -69,6 +90,12 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     public void send(JsonObject o) {
         synchronized (lock) {
             currentOutput = o;
+        }
+    }
+
+    public RobotMode getMode() {
+        synchronized (lock) {
+            return mode;
         }
     }
 }

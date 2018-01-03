@@ -35,7 +35,7 @@ class PathSegment(var start: Translation2D, var end: Translation2D, var speed: D
     }
 
     fun getClosestPoint(query: Translation2D): ClosestPointReport {
-        var ret = ClosestPointReport()
+        val ret = ClosestPointReport()
 
         if(length > 1E-9) {
             val dot = dotProduct(query)
